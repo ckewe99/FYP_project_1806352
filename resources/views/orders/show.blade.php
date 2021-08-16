@@ -90,7 +90,7 @@
                         <div class="col col-md-3"></div>
                         <div class="col col-md-3"></div>
                         <div class="col col-md-2 col-sm-2">
-                            <div class="text-right ml-3">
+                            <div class="text-right mr-10">
                                 <h2>Subtotal : MYR</h2>
                             </div>
                         </div>
@@ -136,6 +136,5 @@
             $('#price' + id).text(price.toFixed(2));
             $('#total').text(total.toFixed(2));
         }
-
     </script>
 @endpush

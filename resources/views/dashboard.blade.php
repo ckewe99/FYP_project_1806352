@@ -105,8 +105,46 @@
                         </div>
                     </div>
                 @endif
+                <div class="card">
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <div sytle="height:10px;width:300px;margin:auto;">
+                                <canvas id="barChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             @endif
+
+
         </div>
     </div>
 
 @endsection
+@push('js')
+    <script>
+        $(function() {
+            var barCanvas = $("#barChart");
+            var barChart = new Chart(barCanvas, {
+                type: "bar",
+                data: {
+                    labels: ['Good', 'Neutral', 'Bad'],
+                    datasets: [{
+                        label: "Sentiment",
+                        data: [{{ $data['good'] }}, {{ $data['neu'] }}, {{ $data['bad'] }}],
+                        backgroundColour: ['Green', 'Grey', 'Red'],
+                    }],
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                            }
+                        }]
+                    }
+                }
+            });
+        })
+    </script>
+@endpush

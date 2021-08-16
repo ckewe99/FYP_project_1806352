@@ -61,6 +61,10 @@
     <!-- Optional JS -->
     <script src="/assets/vendor/chart.js/dist/Chart.min.js"></script>
     <script src="/assets/vendor/chart.js/dist/Chart.extension.js"></script>
+    {{-- new add in --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"
+        integrity="sha512-vBmx0N/uQOXznm/Nbkp7h0P1RfLSj0HQrFSzV8m7rOGyj30fYAOKHYvCNez+yM8IrfnW0TCodDEjRqf6fodf/Q=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Argon JS -->
     <script src="/assets/js/argon.js?v=1.2.0"></script>
 
@@ -84,7 +88,9 @@
 
     {{-- flatpickr CDN --}}
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
+    {{-- new jquery --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
 </body>
 @include('layouts.alert-messages')

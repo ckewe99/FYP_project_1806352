@@ -52,8 +52,6 @@ Route::middleware(['checkIsAdmin'])->group(function () {
     Route::delete('/date-range-delete/{id}', [App\Http\Controllers\DateRangeController::class, 'date_range_delete'])->name('date_range.delete');
 
 
-
-
     // Route::resource('stalls', App\Http\Controllers\StallController::class);
     // Route::get('stalls-list', [App\Http\Controllers\StallController::class, 'list'])->name('stall-list');
 });
@@ -67,6 +65,7 @@ Route::middleware(['checkIsKitchenandAdmin'])->group(function () {
 Route::get('profile', [App\Http\Controllers\UserController::class, 'profile'])->name('profile');
 Route::get('/profile/password', [App\Http\Controllers\UserController::class, 'viewchangePwd'])->name('change-pwd-view');
 Route::post('/profile/password/change', [App\Http\Controllers\UserController::class, 'changePassword'])->name('change-pwd');
+
 Route::middleware(['checkUserCanOrder'])->group(function () {
     Route::resource('order', App\Http\Controllers\OrderController::class);
     //Route::post('orders/menu', [App\Http\Controllers\OrderController::class, 'chooseMenu'])->name('chooseMenu')->middleware('checkUserCanOrder');
@@ -81,8 +80,9 @@ Route::middleware(['checkUserCanDeleteOrEdit'])->group(function () {
 Route::get('orders/selectDateRange', [App\Http\Controllers\OrderController::class, 'orderHistorySelectDateRange'])->name('orderHistory.selectDateateRange');
 Route::post('orders/history', [App\Http\Controllers\OrderController::class, 'history'])->name('viewOrder');
 
-
+Route::get('/text-sentiment', [App\Services\TextSentiment::class, 'sentiment'])->name('text-sentiment');
 
 //test
 Route::get('user/export/', [App\Http\Controllers\UserController::class, 'test']);
 Route::post('import/menu', [App\Http\Controllers\MenuController::class, 'testImport'])->name('import-food');
+Route::post('order/comment', [App\Http\Controllers\TransactionController::class, 'comment'])->name('comment');

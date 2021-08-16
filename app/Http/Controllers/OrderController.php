@@ -8,6 +8,7 @@ use App\Models\Food;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\Stall;
+use App\Models\Transaction;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -78,29 +79,35 @@ class OrderController extends Controller
     {
         $count = count($request->get('quantity'));
 
-        DB::beginTransaction();
+
 
         try {
+            DB::beginTransaction();
+
+            $transaction = new Transaction();
+            $transaction->save();
+
             for ($i = 0; $i < $count; $i++) {
                 $data = new Order();
                 $data->user_id = Auth::id();
                 $data->food_id = $request->food[$i];
                 $data->quantity =  $request->quantity[$i];
                 $data->date_range_id =  DateRange::where('active_date_range', 1)->pluck('id')->first();
-
+                $data->transaction_id = $transaction->id;
                 $data->save();
             }
 
             $user = User::find(Auth::id());
             $user->ordered = 1;
             $user->save();
+
+            DB::commit();
+            Session::flash('alert-success', 'Successfully Ordered');
+            return redirect()->route('home');
         } catch (Exception $e) {
             DB::rollBack();
+            return $e->getMessage();
         }
-
-        DB::commit();
-        Session::flash('alert-success', 'Successfully Ordered');
-        return redirect()->route('home');
     }
 
     /**
@@ -284,9 +291,12 @@ class OrderController extends Controller
     {
         DB::beginTransaction();
         try {
-            Order::where('user_id', '=', Auth::id())
-                ->where('date_range_id', '=', $id)
-                ->delete();
+            $order = Order::where('user_id', '=', Auth::id())
+                ->where('date_range_id', '=', $id)->first();
+            Transaction::find($order->transaction_id)->delete();
+            // Order::where('user_id', '=', Auth::id())
+            //     ->where('date_range_id', '=', $id)
+            //     ->delete();
 
             $user = User::find(Auth::id());
             $user->ordered = 0;

@@ -6,6 +6,8 @@ use App\Models\DateRange;
 use App\Models\Stall;
 use App\Models\User;
 use App\Models\Order;
+use App\Models\Transaction;
+use App\Services\TextSentiment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -32,10 +34,12 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $strings = Transaction::select('comments')->get();
+        $data = TextSentiment::sentiment($strings);
         $stalls = Stall::all();
         $date_range = DateRange::all();
         $stall = Stall::where('user_id', Auth::id())->first();
-        return view('dashboard', compact('stalls', 'date_range', 'stall'));
+        return view('dashboard', compact('stalls', 'date_range', 'stall', 'data'));
     }
 
     public function setting()

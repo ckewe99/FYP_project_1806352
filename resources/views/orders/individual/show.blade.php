@@ -7,7 +7,35 @@
                     <h3>{{ $date_range->start }} until {{ $date_range->end }}</h3>
                 </div>
                 @if ($date_range->active_date_range == 1 && Auth::user()->can_order == 1 && Auth::user()->ordered)
-                    <div class="col-md-6 col-sm-6 text-right">
+
+                    <div class="col-md col-sm text-right">
+                        <a class="btn btn-outline-success btn-sm" data-toggle="modal"
+                            data-target="#exampleModal">Comment</a>
+                    </div>
+                    {{-- modal --}}
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Feedback Form</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="post" action="{{ route('comment') }}">
+                                        @csrf
+                                        <input type="hidden" name="date_range_id" value="{{ $date_range->id }}">
+                                        <textarea name="comment" class="form-control mb-3"
+                                            placeholder="Please kindly leave your comment"></textarea>
+                                        <input type="submit">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md col-sm text-right">
                         <a class="btn btn-outline-danger btn-icon m-1 btn-sm destroy"
                             href="{{ route('deleteOrder', $date_range->id) }}"
                             onClick="return confirm('Are you sure?')"><span class="ul-btn__icon"><i
