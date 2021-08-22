@@ -105,17 +105,63 @@
                         </div>
                     </div>
                 @endif
-                <div class="card">
-                    <div class="card-body">
-                        <div class="chart-container">
-                            <div sytle="height:10px;width:300px;margin:auto;">
-                                <canvas id="barChart"></canvas>
+
+
+                <div class="row">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="h3 mb-0">Sentiment Analysis</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart">
+                                <div sytle="height:10px;width:300px;margin:auto;">
+                                    <canvas id="barChart" class="chart-canvas"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            @endif
 
+                <div class='row'>
+                    <div class="col-md-6 col-sm-6">
+                        <table>
+                            <caption>Path to class</caption>
+                            <form action="{{ route('path-to-class') }}">
+                                <tr>
+                                    <td>From:</td>
+                                    <td><input type="text" name="from"></td>
+                                </tr>
+                                <tr>
+                                    <td>To:</td>
+                                    <td><input type="text" name="to"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="submit"></td>
+                                </tr>
+                            </form>
+                        </table>
+                    </div>
+                </div>
+            @endif
+            @if (Auth::id() != 1 && Auth::id() != 2)
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Recommend Food by this week</p>
+                        @if ($times >= 3)
+                            <table>
+
+                                @foreach ($array2 as $food)
+                                    <tr>
+                                        <td>{{ $food['name'] }}</td>
+                                    </tr>
+                                @endforeach
+                            </table>
+                        @else
+                            <p>Sorry Nothing to show you</p>
+                        @endif
+                    </div>
+                </div>
+            @endif
 
         </div>
     </div>
@@ -130,18 +176,23 @@
                 data: {
                     labels: ['Good', 'Neutral', 'Bad'],
                     datasets: [{
-                        label: "Sentiment",
-                        data: [{{ $data['good'] }}, {{ $data['neu'] }}, {{ $data['bad'] }}],
+                        // label: "Sentiment",
+                        data: [{{ $data['good'] }}, {{ $data['neu'] }},
+                            {{ $data['bad'] }}
+                        ],
                         backgroundColour: ['Green', 'Grey', 'Red'],
                     }],
                 },
                 options: {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true,
-                            }
-                        }]
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Chart.js Floating Bar Chart'
+                        }
                     }
                 }
             });

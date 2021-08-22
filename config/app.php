@@ -229,6 +229,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Analyzer' => Sentiment\Analyzer::class,
+        'Dijkstra' => Fisharebest\Algorithm\Dijkstra::class,
     ],
 
 ];

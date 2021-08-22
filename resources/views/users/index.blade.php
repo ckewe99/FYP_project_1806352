@@ -34,6 +34,7 @@
         </div>
     </div>
 @endsection
+
 @push('js')
     <script>
         var oTable = $('.yajra-datatable').DataTable({
@@ -122,7 +123,6 @@
 
             }
         });
-
     </script>
 
 @endpush

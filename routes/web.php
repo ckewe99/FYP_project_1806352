@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -83,6 +83,13 @@ Route::post('orders/history', [App\Http\Controllers\OrderController::class, 'his
 Route::get('/text-sentiment', [App\Services\TextSentiment::class, 'sentiment'])->name('text-sentiment');
 
 //test
-Route::get('user/export/', [App\Http\Controllers\UserController::class, 'test']);
-Route::post('import/menu', [App\Http\Controllers\MenuController::class, 'testImport'])->name('import-food');
+
+
+Route::get('test/TSP', [App\Services\TestTSP::class, 'test'])->name('test');
+Route::get('test/fav', [UserController::class, 'fav_top_5'])->name('test.fav');
+Route::get('delivery', [UserController::class, 'dijakstra'])->name('path-to-class');
+
+//good
+Route::get('KNN/initial', [App\Services\FoodClassificationService\KNN::class, 'initial'])->name('KNN-initial');
+Route::post('import/menu', [App\Http\Controllers\MenuController::class, 'foodImport'])->name('import-food');
 Route::post('order/comment', [App\Http\Controllers\TransactionController::class, 'comment'])->name('comment');
