@@ -45,7 +45,7 @@ class HomeController extends Controller
         $knn = new KNN();
         $array = [];
         $array2 = [];
-        if ($times <= 0) {
+        if ($times > 0) {
             try {
                 //retrieve user fav
                 $items = UserController::fav_top_5();
