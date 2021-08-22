@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\MixExport;
+
+
+use App\Services\Dijkstra\Dijkstra;
+use Illuminate\Support\Facades\DB;
 use App\Models\StudentClass;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Services\FoodClassificationService\KNN;
 use Yajra\Datatables\Datatables;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
@@ -223,8 +226,38 @@ class UserController extends Controller
         }
     }
 
-    public function test()
+
+    public static function fav_top_5()
     {
-        return Excel::download(new MixExport, 'default.xlsx');
+        $obj = DB::table('orders')
+            ->join('food', 'orders.food_id', '=', 'food.id')
+            ->select('food.name', DB::raw('COUNT(food.name) as quantity'), 'food.matrix')
+            ->groupBy('food.name', 'food.matrix')
+            ->where('orders.user_id', Auth::id())
+            ->orderBy('quantity', 'desc')
+            ->take(5)
+            ->get();
+
+        return $obj;
+    }
+
+
+
+    public function dijakstra(Request $request)
+    {
+
+        $graph = array(
+            'A' => array('B' => 9, 'D' => 14, 'F' => 7),
+            'B' => array('A' => 9, 'C' => 11, 'D' => 2, 'F' => 10),
+            'C' => array('B' => 11, 'E' => 6, 'F' => 15),
+            'D' => array('A' => 14, 'B' => 2, 'E' => 9),
+            'E' => array('C' => 6, 'D' => 9),
+            'F' => array('A' => 7, 'B' => 10, 'C' => 15),
+            'G' => array(),
+        );
+
+        $algorithm = new Dijkstra($graph);
+        return $algorithm->shortestPaths($request->from, $request->to);
+        //$path = $algorithm->shortestPaths('A', 'E', array('F'));
     }
 }

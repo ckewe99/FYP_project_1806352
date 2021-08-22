@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\DateRange;
+use App\Models\Food;
 use App\Models\Stall;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Transaction;
+use App\Services\FoodClassificationService\KNN;
 use App\Services\TextSentiment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -34,12 +36,52 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $knn = new KNN();
+        $array = [];
+        $array2 = [];
+        try {
+            //retrieve user fav
+            $items = UserController::fav_top_5();
+            foreach ($items as $item) {
+                array_push($array, $knn->getResult(json_decode($item->matrix)));
+            }
+
+            //retrieve food stall
+            $active_date_range = DateRange::where('active_date_range', '=', 1)->get();
+
+            $foods = Food::where('date_range_id', '=', $active_date_range[0]['id'])
+                ->groupBy('name', 'matrix')
+                ->select('name', 'matrix')
+                ->orderBy('stall_id')
+                ->get();
+
+            foreach ($foods as $food) {
+
+                $result = $knn->getResult(json_decode($food['matrix']));
+
+                foreach ($array as $i) {
+                    if ($i["result"] == $result['result']) {
+                        //matched
+                        array_push($array2, $food);
+                        break;
+                    }
+                }
+            }
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+        $lol = DB::table('orders')
+            ->where('user_id', '=', Auth::id())
+            ->select('date_range_id')
+            ->groupBy('date_range_id')
+            ->get();
+        $times = $lol->count();
         $strings = Transaction::select('comments')->get();
         $data = TextSentiment::sentiment($strings);
         $stalls = Stall::all();
         $date_range = DateRange::all();
         $stall = Stall::where('user_id', Auth::id())->first();
-        return view('dashboard', compact('stalls', 'date_range', 'stall', 'data'));
+        return view('dashboard', compact('stalls', 'date_range', 'stall', 'data', 'array2', 'times'));
     }
 
     public function setting()

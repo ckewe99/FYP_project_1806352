@@ -33,6 +33,7 @@ class FoodsImport implements ToModel, WithHeadingRow
             'session' => $row['session'],
             'days' => $row['days'],
             'date_range_id' => $this->date_range_id,
+            'matrix' => $row['matrix'],
         ]);
     }
 }

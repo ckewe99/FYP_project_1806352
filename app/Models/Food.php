@@ -22,5 +22,6 @@ class Food extends Model
         // 'end',
         'date_range_id',
         'stall_id',
+        'matrix'
     ];
 }

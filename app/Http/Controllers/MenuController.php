@@ -9,7 +9,6 @@ use App\Models\Stall;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -213,7 +212,7 @@ class MenuController extends Controller
             ->make();
     }
 
-    public function testImport(Request $request)
+    public function foodImport(Request $request)
     {
         Excel::import(new FoodsImport($request->get('date_range_id')), $request->file('import_food'));
         Session::flash('alert-success', 'Imported Successfully');
