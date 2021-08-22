@@ -72,8 +72,8 @@ class UserSeeder extends Seeder
         ['name' => 'TEOH POW YING', 'email' => 'teohpowying@spsmp.edu.my', 'type' => '3', 'student_physical_id' => 'S051', 'class_id' => '2'],
         ['name' => 'LIM CAREN', 'email' => 'limcaren@spsmp.edu.my', 'type' => '3', 'student_physical_id' => 'S052', 'class_id' => '2'],
         ['name' => 'TAN KAI ZHENG', 'email' => 'tankaizheng@spsmp.edu.my', 'type' => '3', 'student_physical_id' => 'T126', 'class_id' => '2'],
-        ['name' => 'KOO MEE LIAN', 'email' => 'koomeelian@spsmp.edu.my', 'type' => '3', 'student_physical_id' => 'S999', 'class_id' => '2'],
-        ['name' => 'SENG KOK BOON', 'email' => 'sengkokboon@spsmp.edu.my', 'type' => '3', 'student_physical_id' => 'S998', 'class_id' => '2'],
+        ['name' => 'KOO MEE LIAN', 'email' => 'koomeelian@spsmp.edu.my', 'type' => '2', 'student_physical_id' => 'S999', 'class_id' => '2'],
+        ['name' => 'SENG KOK BOON', 'email' => 'sengkokboon@spsmp.edu.my', 'type' => '2', 'student_physical_id' => 'S998', 'class_id' => '2'],
 
         //J1C DONE
         ['name' => 'ANG PING ERN', 'email' => '2021064@spsmp.edu.my', 'type' => '4', 'student_physical_id' => '2021064', 'class_id' => '3'],
