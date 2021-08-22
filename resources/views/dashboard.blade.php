@@ -113,7 +113,7 @@
                             <h5 class="h3 mb-0">Sentiment Analysis</h5>
                         </div>
                         <div class="card-body">
-                            <div class="chart">
+                            <div class="chart" style="height:100%">
                                 <div sytle="height:10px;width:300px;margin:auto;">
                                     <canvas id="barChart" class="chart-canvas"></canvas>
                                 </div>
