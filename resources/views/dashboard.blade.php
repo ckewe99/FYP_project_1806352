@@ -147,7 +147,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <p>Recommend Food by this week</p>
-                        @if ($times >= 3)
+                        @if ($times >= 2)
                             <table>
 
                                 @foreach ($array2 as $food)

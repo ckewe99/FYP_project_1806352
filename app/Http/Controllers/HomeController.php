@@ -45,37 +45,43 @@ class HomeController extends Controller
         $knn = new KNN();
         $array = [];
         $array2 = [];
-        try {
-            //retrieve user fav
-            $items = UserController::fav_top_5();
-            foreach ($items as $item) {
-                array_push($array, $knn->getResult(json_decode($item->matrix)));
-            }
+        if ($times <= 0) {
+            try {
+                //retrieve user fav
+                $items = UserController::fav_top_5();
+                foreach ($items as $item) {
+                    array_push($array, $knn->getResult(json_decode($item->matrix)));
+                }
 
-            //retrieve food stall
-            $active_date_range = DateRange::where('active_date_range', '=', 1)->get();
+                //retrieve food stall
+                $active_date_range = DateRange::where('active_date_range', '=', 1)->get();
 
-            $foods = Food::where('date_range_id', '=', $active_date_range[0]['id'])
-                ->groupBy('name', 'matrix')
-                ->select('name', 'matrix')
-                ->orderBy('stall_id')
-                ->get();
+                $foods = Food::where('date_range_id', '=', $active_date_range[0]['id'])
+                    ->groupBy('name', 'matrix')
+                    ->select('name', 'matrix')
+                    ->orderBy('stall_id')
+                    ->get();
 
-            foreach ($foods as $food) {
+                if ($foods == null) {
+                    return 'yes null';
+                }
+                foreach ($foods as $food) {
 
-                $result = $knn->getResult(json_decode($food['matrix']));
+                    $result = $knn->getResult(json_decode($food['matrix']));
 
-                foreach ($array as $i) {
-                    if ($i["result"] == $result['result']) {
-                        //matched
-                        array_push($array2, $food);
-                        break;
+                    foreach ($array as $i) {
+                        if ($i["result"] == $result['result']) {
+                            //matched
+                            array_push($array2, $food);
+                            break;
+                        }
                     }
                 }
+            } catch (Exception $e) {
+                //return $e->getMessage();
             }
-        } catch (Exception $e) {
-            //return $e->getMessage();
         }
+
 
         $strings = Transaction::select('comments')->get();
         $data = TextSentiment::sentiment($strings);
