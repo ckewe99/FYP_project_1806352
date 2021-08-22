@@ -149,7 +149,6 @@
                         <p>Recommend Food by this week</p>
                         @if ($times >= 2)
                             <table>
-
                                 @foreach ($array2 as $food)
                                     <tr>
                                         <td>{{ $food['name'] }}</td>
