@@ -36,6 +36,12 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $lol = DB::table('orders')
+            ->where('user_id', '=', Auth::id())
+            ->select('date_range_id')
+            ->groupBy('date_range_id')
+            ->get();
+        $times = $lol->count();
         $knn = new KNN();
         $array = [];
         $array2 = [];
@@ -68,14 +74,9 @@ class HomeController extends Controller
                 }
             }
         } catch (Exception $e) {
-            return $e->getMessage();
+            //return $e->getMessage();
         }
-        $lol = DB::table('orders')
-            ->where('user_id', '=', Auth::id())
-            ->select('date_range_id')
-            ->groupBy('date_range_id')
-            ->get();
-        $times = $lol->count();
+
         $strings = Transaction::select('comments')->get();
         $data = TextSentiment::sentiment($strings);
         $stalls = Stall::all();
