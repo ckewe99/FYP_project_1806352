@@ -232,7 +232,7 @@ class UserController extends Controller
         $obj = DB::table('orders')
             ->join('food', 'orders.food_id', '=', 'food.id')
             ->select('food.name', DB::raw('COUNT(food.name) as quantity'), 'food.matrix')
-            ->groupBy('food.name', json_decode('food.matrix'))
+            ->groupBy('food.name', 'food.matrix')
             ->where('orders.user_id', Auth::id())
             ->orderBy('quantity', 'desc')
             ->take(5)

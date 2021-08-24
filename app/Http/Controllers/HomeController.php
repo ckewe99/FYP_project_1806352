@@ -57,8 +57,8 @@ class HomeController extends Controller
                 $active_date_range = DateRange::where('active_date_range', '=', 1)->get();
 
                 $foods = Food::where('date_range_id', '=', $active_date_range[0]['id'])
-                    ->groupBy('name', json_decode('matrix'))
-                    ->select('name', json_decode('matrix'))
+                    ->groupBy('name', 'matrix')
+                    ->select('name', 'matrix')
                     ->orderBy('stall_id')
                     ->get();
 
