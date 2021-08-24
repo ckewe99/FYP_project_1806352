@@ -61,6 +61,7 @@ class HomeController extends Controller
                     ->groupBy('name')
                     ->select('name')
                     ->orderBy('stall_id')
+                    ->groupBy('stall_id')
                     ->get();
 
                 foreach ($foods_name as $food_name) {
