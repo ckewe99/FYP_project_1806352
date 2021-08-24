@@ -232,7 +232,7 @@ class UserController extends Controller
         $obj = DB::table('orders')
             ->join('food', 'orders.food_id', '=', 'food.id')
             ->select('food.name', DB::raw('COUNT(food.name) as quantity'), 'food.matrix')
-            ->groupBy('food.name', 'food.matrix')
+            ->groupBy('food.name', json_decode('food.matrix'))
             ->where('orders.user_id', Auth::id())
             ->orderBy('quantity', 'desc')
             ->take(5)
@@ -247,12 +247,12 @@ class UserController extends Controller
     {
 
         $graph = array(
-            'A' => array('B' => 9, 'D' => 14, 'F' => 7),
-            'B' => array('A' => 9, 'C' => 11, 'D' => 2, 'F' => 10),
+            'J1C' => array('B' => 9, 'D' => 14, 'F' => 7),
+            'B' => array('J1C' => 9, 'C' => 11, 'D' => 2, 'F' => 10),
             'C' => array('B' => 11, 'E' => 6, 'F' => 15),
-            'D' => array('A' => 14, 'B' => 2, 'E' => 9),
+            'D' => array('J1C' => 14, 'B' => 2, 'E' => 9),
             'E' => array('C' => 6, 'D' => 9),
-            'F' => array('A' => 7, 'B' => 10, 'C' => 15),
+            'F' => array('J1C' => 7, 'B' => 10, 'C' => 15),
             'G' => array(),
         );
 
