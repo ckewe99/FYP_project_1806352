@@ -42,6 +42,7 @@ class HomeController extends Controller
             ->groupBy('date_range_id')
             ->get();
         $times = $lol->count();
+        dd($times);
         $knn = new KNN();
         $array = [];
         $array2 = [];
