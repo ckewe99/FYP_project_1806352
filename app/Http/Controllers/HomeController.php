@@ -42,7 +42,6 @@ class HomeController extends Controller
             ->groupBy('date_range_id')
             ->get();
         $times = $lol->count();
-        dd($times);
         $knn = new KNN();
         $array = [];
         $array2 = [];
@@ -81,6 +80,8 @@ class HomeController extends Controller
             } catch (Exception $e) {
                 return $e->getMessage();
             }
+        } else {
+            $times = 0;
         }
 
 
