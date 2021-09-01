@@ -34,6 +34,7 @@ Route::middleware(['checkIsAdmin'])->group(function () {
     Route::get('menu-index/{id}', [App\Http\Controllers\MenuController::class, 'menusIndex'])->name('menus_index');
     Route::get('sessionOneList/{days}/{date_range}', [App\Http\Controllers\MenuController::class, 'sessionOneList'])->name('sessionOneList');
     Route::get('sessionTwoList/{days}/{date_range}', [App\Http\Controllers\MenuController::class, 'sessionTwoList'])->name('sessionTwoList');
+    Route::post('import/menu', [App\Http\Controllers\MenuController::class, 'foodImport'])->name('import-food');
 
     Route::resource('classes', App\Http\Controllers\StudentClassController::class);
     Route::get('class/list', [App\Http\Controllers\StudentClassController::class, 'list'])->name('class.list');
@@ -79,17 +80,20 @@ Route::middleware(['checkUserCanDeleteOrEdit'])->group(function () {
 
 Route::get('orders/selectDateRange', [App\Http\Controllers\OrderController::class, 'orderHistorySelectDateRange'])->name('orderHistory.selectDateateRange');
 Route::post('orders/history', [App\Http\Controllers\OrderController::class, 'history'])->name('viewOrder');
-
 Route::get('/text-sentiment', [App\Services\TextSentiment::class, 'sentiment'])->name('text-sentiment');
+Route::get('KNN/initial', [App\Services\FoodClassificationService\KNN::class, 'initial'])->name('KNN-initial');
+Route::post('order/comment', [App\Http\Controllers\TransactionController::class, 'comment'])->name('comment');
+
+
+
+
+
 
 //test
-
-
 Route::get('test/TSP', [App\Services\TestTSP::class, 'test'])->name('test');
 Route::get('test/fav', [UserController::class, 'fav_top_5'])->name('test.fav');
 Route::get('delivery', [UserController::class, 'dijakstra'])->name('path-to-class');
 
 //good
-Route::get('KNN/initial', [App\Services\FoodClassificationService\KNN::class, 'initial'])->name('KNN-initial');
-Route::post('import/menu', [App\Http\Controllers\MenuController::class, 'foodImport'])->name('import-food');
-Route::post('order/comment', [App\Http\Controllers\TransactionController::class, 'comment'])->name('comment');
+
+//Route::post('import/menu', [App\Http\Controllers\MenuController::class, 'foodImport'])->name('import-food');
