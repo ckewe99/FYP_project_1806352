@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\User;
 use App\Models\Stall;
 use App\Models\Transaction;
+use App\Services\TextSentiment;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -330,6 +331,9 @@ class OrderController extends Controller
         $date_range = DateRange::all();
         $stall = Stall::where('user_id', Auth::id())->first();
 
+        $strings = Transaction::select('comments')->get();
+        $data = TextSentiment::sentiment($strings);
+
         if (Auth::user()->type == 1) {
             $s = Stall::find($request->get('stall_id'));
             $result = DB::table('users')
@@ -376,6 +380,6 @@ class OrderController extends Controller
 
 
 
-        return view('dashboard', compact('result', 'date_range', 'stalls', 'items', 'stall'));
+        return view('dashboard', compact('result', 'date_range', 'stalls', 'items', 'stall', 'data'));
     }
 }
