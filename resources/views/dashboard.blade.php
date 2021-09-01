@@ -143,7 +143,7 @@
                     </div>
                 </div>
             @endif
-            @if (Auth::id() != 1 && Auth::id() != 2 && Auth::id() != 3)
+            @if (Auth::user()->type != 1 && Auth::user()->type != 2)
                 <div class="row">
                     <div class="col-md-6">
                         <p>Recommend Food by this week</p>
