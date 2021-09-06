@@ -95,5 +95,5 @@ Route::get('test/fav', [UserController::class, 'fav_top_5'])->name('test.fav');
 Route::get('delivery', [UserController::class, 'dijakstra'])->name('path-to-class');
 
 //good
-
+Route::get('evaluate/KNN', [App\Services\FoodClassificationService\KNN::class, 'evaluation']);
 //Route::post('import/menu', [App\Http\Controllers\MenuController::class, 'foodImport'])->name('import-food');

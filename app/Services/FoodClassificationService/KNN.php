@@ -4,6 +4,7 @@ namespace App\Services\FoodClassificationService;
 
 use Phpml\Classification\KNearestNeighbors;
 use Phpml\ModelManager;
+use Phpml\Metric\ClassificationReport;
 
 class KNN
 {
@@ -24,6 +25,7 @@ class KNN
     private $samples = [
         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //1
         [0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0], //4
+        [0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0], //5
         [0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0], //6
         [0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0], //8
         [0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0], //9
@@ -42,10 +44,17 @@ class KNN
         [0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0], //30
         [0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1], //31
         [0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1], //32
+        [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+        [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
     ];
     private $labels = [
         "Western", //1
         "Thai", //4
+        "Thai",
         "Chinese", //6
         "Malaysian", //8
         "Malaysian", //9
@@ -64,6 +73,12 @@ class KNN
         "Taiwanese", //30
         "Beverage", //31
         "Taiwanese", //32
+        "Western",
+        "Vege",
+        "Japanese",
+        "Taiwanese",
+        "Taiwanese",
+        "Beverage",
     ];
 
     private $filepath = '..\app\Services\model.txt';
@@ -103,5 +118,58 @@ class KNN
         $restoredClassifier = $this->modelManager->restoreFromFile($this->filepath);
         $restoredClassifier->train($sample, $labels);
         $this->modelManager->saveToFile($restoredClassifier, $this->filepath);
+    }
+
+    public function evaluation()
+    {
+        $test_datas = [
+            [0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0],
+            [0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0],
+            [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+            [0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+            [0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1],
+            [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0],
+            [0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0],
+            [0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+        ];
+        $actual = [
+            'Beverage',
+            'Taiwanese',
+            'Malaysian',
+            'Western',
+            'Vege',
+            'Malaysian',
+            'Japanese',
+            'Thai',
+            'Chinese',
+            'Western'
+        ];
+        $predict = [];
+        $restoredClassifier = $this->modelManager->restoreFromFile($this->filepath);
+        foreach ($test_datas as $data) {
+            array_push($predict, $restoredClassifier->predict($data));
+        }
+        $report = new ClassificationReport($actual, $predict);
+        return $predict;
+        return $report->getAverage()['precision'];
+            //return [
+            //     'precision' => $report->getPrecision(),
+            //     'recall' => $report->getRecall(),
+            //     'f1 score' => $report->getF1score(),
+            // ];
+
+
+            // ['cat' => 1.0, 'ant' => 0.0, 'bird' => 0.67]
+
+        ;
+        // ['cat' => 0.67, 'ant' => 0.0, 'bird' => 0.80]
+
+        $report->getSupport();
+        // ['cat' => 1, 'ant' => 1, 'bird' => 3]
+
+        $report->getAverage();
+        // ['precision' => 0.5, 'recall' => 0.56, 'f1score' => 0.49]
     }
 }
