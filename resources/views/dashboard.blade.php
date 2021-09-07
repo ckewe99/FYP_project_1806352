@@ -20,9 +20,6 @@
 
                         @endif
 
-                        <button class="mt-4 btn btn-sm btn-primary" data-toggle="modal1"
-                            data-target="#exampleModal1">营业报告</button>
-
                         {{-- modal --}}
                         <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog"
                             aria-labelledby="exampleModalLabel1" aria-hidden="true">
