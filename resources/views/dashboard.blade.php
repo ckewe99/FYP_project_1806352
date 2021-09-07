@@ -160,9 +160,9 @@
                                             <canvas id="barChart1" class="chart-canvas"></canvas>
                                         </div>
                                     </div>
-                                    <div> Week1 :{{ $weekly_sales[0]['start'] }} - {{ $weekly_sales[0]['end'] }}</div>
+                                    <div> Week1 :{{ $weekly_sales[2]['start'] }} - {{ $weekly_sales[2]['end'] }}</div>
                                     <div> Week2 :{{ $weekly_sales[1]['start'] }} - {{ $weekly_sales[1]['end'] }}</div>
-                                    <div> Week3 :{{ $weekly_sales[2]['start'] }} - {{ $weekly_sales[2]['end'] }}</div>
+                                    <div> Week3 :{{ $weekly_sales[0]['start'] }} - {{ $weekly_sales[0]['end'] }}</div>
                                 </div>
                             </div>
                         </div>
@@ -252,9 +252,9 @@
                     ],
                     datasets: [{
                         // label: "data",
-                        data: [{{ $weekly_sales[0]['total_sales'] }},
+                        data: [{{ $weekly_sales[2]['total_sales'] }},
                             {{ $weekly_sales[1]['total_sales'] }},
-                            {{ $weekly_sales[2]['total_sales'] }}
+                            {{ $weekly_sales[0]['total_sales'] }}
                         ],
                         backgroundColour: ['Green', 'Grey', 'Red'],
                     }],

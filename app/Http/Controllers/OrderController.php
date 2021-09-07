@@ -376,7 +376,7 @@ class OrderController extends Controller
                 ->where('users.student_physical_id', $request->get('id'))
                 ->where('food.stall_id', $s[0]->id)
                 ->select(DB::raw('food.name, orders.quantity'))
-                ->groupByRaw('food.name')
+                ->groupByRaw('food.name,orders.quantity')
                 ->get();
         }
 
