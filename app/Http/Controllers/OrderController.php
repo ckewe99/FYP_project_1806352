@@ -326,6 +326,7 @@ class OrderController extends Controller
 
     public function checkAmount(Request $request)
     {
+        $weekly_sales = ReportController::weeklysale(Auth::id());
         //return $request;
         $stalls = Stall::all();
         $date_range = DateRange::all();
@@ -380,7 +381,6 @@ class OrderController extends Controller
         }
 
 
-
-        return view('dashboard', compact('result', 'date_range', 'stalls', 'items', 'stall', 'data'));
+        return view('dashboard', compact('result', 'date_range', 'stalls', 'items', 'stall', 'data', 'weekly_sales'));
     }
 }
