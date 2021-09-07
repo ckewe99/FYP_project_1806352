@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -96,4 +97,5 @@ Route::get('delivery', [UserController::class, 'dijakstra'])->name('path-to-clas
 
 //good
 Route::get('evaluate/KNN', [App\Services\FoodClassificationService\KNN::class, 'evaluation']);
+Route::get('test/weeklysales', [ReportController::class, 'weeklysale']);
 //Route::post('import/menu', [App\Http\Controllers\MenuController::class, 'foodImport'])->name('import-food');

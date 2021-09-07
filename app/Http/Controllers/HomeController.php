@@ -84,13 +84,13 @@ class HomeController extends Controller
             $times = 0;
         }
 
-
+        $weekly_sales = ReportController::weeklysale(Auth::id());
         $strings = Transaction::select('comments')->get();
         $data = TextSentiment::sentiment($strings);
         $stalls = Stall::all();
         $date_range = DateRange::all();
         $stall = Stall::where('user_id', Auth::id())->first();
-        return view('dashboard', compact('stalls', 'date_range', 'stall', 'data', 'array2', 'times'));
+        return view('dashboard', compact('stalls', 'date_range', 'stall', 'data', 'array2', 'times', 'weekly_sales'));
     }
 
     public function setting()

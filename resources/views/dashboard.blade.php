@@ -11,11 +11,37 @@
                     @if (Auth::user()->type == 2)
                         @if ($stall->id == 1)
                             <a href="{{ route('report.hawker.index', 1) }}" class="mt-4 btn btn-sm btn-primary">荤食档口</a>
+
                         @elseif($stall->id == 2)
                             <a href="{{ route('report.hawker.index', 2) }}" class="mt-4 btn btn-sm btn-primary">素食档口</a>
+
                         @elseif($stall->id == 3)
                             <a href="{{ route('report.hawker.index', 3) }}" class="mt-4 btn btn-sm btn-primary">饮料档口</a>
+
                         @endif
+
+                        <button class="mt-4 btn btn-sm btn-primary" data-toggle="modal1"
+                            data-target="#exampleModal1">营业报告</button>
+
+                        {{-- modal --}}
+                        <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel1">Ordered items</h5>
+                                        <button type="button" class="close" data-dismiss="modal1"
+                                            aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     @elseif(Auth::user()->type == 1)
                         <a href="{{ route('report.hawker.index', 1) }}" class="mt-4 btn btn-sm btn-primary">荤食档口</a>
                         <a href="{{ route('report.hawker.index', 2) }}" class="mt-4 btn btn-sm btn-primary">素食档口</a>
@@ -105,44 +131,64 @@
                         </div>
                     </div>
                 @endif
-
-
-                <div class="row">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="h3 mb-0">Sentiment Analysis</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="chart" style="height:100%">
-                                <div sytle="height:10px;width:300px;margin:auto;">
-                                    <canvas id="barChart" class="chart-canvas"></canvas>
+                @if (Auth::user()->type == 1)
+                    <div class="row">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="h3 mb-0">Sentiment Analysis</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart" style="height:100%">
+                                    <div sytle="height:10px;width:300px;margin:auto;">
+                                        <canvas id="barChart" class="chart-canvas"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class='row'>
-                    <div class="col-md-6 col-sm-6">
-                        <table>
-                            <caption>Path to class</caption>
-                            <form action="{{ route('path-to-class') }}">
-                                <tr>
-                                    <td>From:</td>
-                                    <td><input type="text" name="from"></td>
-                                </tr>
-                                <tr>
-                                    <td>To:</td>
-                                    <td><input type="text" name="to"></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="submit"></td>
-                                </tr>
-                            </form>
-                        </table>
+                @endif
+                @if (Auth::user()->type == 2)
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="h3 mb-0">Weekly sales</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart" style="height:100%">
+                                        <div sytle="height:10px;width:300px;margin:auto;">
+                                            <canvas id="barChart1" class="chart-canvas"></canvas>
+                                        </div>
+                                    </div>
+                                    <div> Week1 :{{ $weekly_sales[0]['start'] }} - {{ $weekly_sales[0]['end'] }}</div>
+                                    <div> Week2 :{{ $weekly_sales[1]['start'] }} - {{ $weekly_sales[1]['end'] }}</div>
+                                    <div> Week3 :{{ $weekly_sales[2]['start'] }} - {{ $weekly_sales[2]['end'] }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="h3 mb-0">Sentiment Analysis</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart" style="height:100%">
+                                        <div sytle="height:10px;width:300px;margin:auto;">
+                                            <canvas id="barChart" class="chart-canvas"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    <div class="row">
+
+                    </div>
+                @endif
             @endif
+
+
+
             @if (Auth::user()->type != 1 && Auth::user()->type != 2)
                 <div class="row">
                     <div class="col-md-6">
@@ -186,6 +232,38 @@
                     responsive: true,
                     plugins: {
                         legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Chart.js Floating Bar Chart'
+                        }
+                    }
+                }
+            });
+
+            var barCanvas1 = $("#barChart1");
+            var barChart1 = new Chart(barCanvas1, {
+                type: "bar",
+                data: {
+                    labels: ['Week 1',
+                        'Week 2',
+                        'Week 3'
+                    ],
+                    datasets: [{
+                        // label: "data",
+                        data: [{{ $weekly_sales[0]['total_sales'] }},
+                            {{ $weekly_sales[1]['total_sales'] }},
+                            {{ $weekly_sales[2]['total_sales'] }}
+                        ],
+                        backgroundColour: ['Green', 'Grey', 'Red'],
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true,
                             position: 'top',
                         },
                         title: {

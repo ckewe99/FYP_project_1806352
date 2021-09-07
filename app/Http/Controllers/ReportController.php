@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\DateRange;
 use App\Models\Stall;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
@@ -151,5 +153,34 @@ class ReportController extends Controller
         $i = 0;
         // return response()->json($item['MON']['French Fries'][0]);
         return view('reports.index', compact('item', 'days', 'date_range', 'stall', 'i', 'new_prices'));
+    }
+
+    public static function weeklysale($stall_owner_id)
+    {
+        $date_ranges = DateRange::orderBy('start', 'desc')->take(4)->get();
+        $final_result = [];
+        foreach ($date_ranges as $date_range) {
+            $query =  DB::table('orders')
+                ->join('food', 'food.id', 'orders.food_id')
+                ->join('stalls', 'stalls.id', 'food.stall_id')
+                ->join('date_ranges', 'date_ranges.id', 'food.date_range_id')
+                ->where('stalls.user_id', '=', $stall_owner_id)
+                ->where('food.date_range_id', '=', $date_range->id)
+                ->select(DB::raw('SUM(food.price*orders.quantity) as total_sales , date_ranges.start, date_ranges.end'))
+                ->groupBy('food.stall_id', 'food.date_range_id', 'date_ranges.start', 'date_ranges.end')
+                ->get();
+
+
+            if ($query == '[]') {
+                $no_earn = DateRange::where('id', '=', $date_range->id)->get();
+                $query = ["total_sales" => 0, "start" => $no_earn[0]->start, "end" => $no_earn[0]->end];
+            } else {
+                $tmp = $query;
+                $query = ["total_sales" => (int)$tmp[0]->total_sales, "start" => $tmp[0]->start, "end" => $tmp[0]->end];
+            }
+            array_push($final_result, $query);
+        }
+
+        return $final_result;
     }
 }
